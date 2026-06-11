@@ -9,9 +9,6 @@
     <!-- FontAwesome CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Facebook SDK v18+ -->
-    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/fr_FR/sdk.js#xfbml=1&version=v18.0"></script>
-    
     <style>
         /* ==================== RESET & BASE ==================== */
         :root {
@@ -43,7 +40,7 @@
         }
 
         h1, h2, h3, h4, h5, h6 {
-            font-family: 'Segoe UI', 'Montserrat', system-ui, sans-serif;
+            font-family: 'Segoe UI', system-ui, sans-serif;
             font-weight: 700;
             line-height: 1.3;
         }
@@ -68,12 +65,6 @@
             justify-content: space-between;
             align-items: center;
             padding: 16px 0;
-        }
-        .logo{
-            display: flex;
-        }
-        .logo img{
-            margin-right: 10px;
         }
 
         .logo a {
@@ -344,14 +335,44 @@
             display: flex;
             justify-content: center;
             padding: 20px 0;
+            min-height: 450px;
         }
 
         .fb-page-container {
-            max-width: 100%;
-            overflow-x: auto;
+            width: 100%;
+            max-width: 500px;
             display: flex;
             justify-content: center;
-            min-height: 450px;
+        }
+
+        .fb-page-fallback {
+            text-align: center;
+            padding: 60px 20px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+        }
+
+        .fb-page-fallback i {
+            font-size: 48px;
+            color: var(--secondary);
+            margin-bottom: 16px;
+        }
+
+        .fb-page-fallback p {
+            margin-bottom: 16px;
+            color: var(--gray);
+        }
+
+        .btn-fb {
+            background: #1877f2;
+            color: white;
+            padding: 10px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
         }
 
         /* ==================== FOOTER ==================== */
@@ -565,10 +586,8 @@
         <div class="container">
             <nav class="navbar">
                 <div class="logo">
-                    <a href="assets/images/logo.png" class="img">
-                        <img src="assets/images/logo.png" alt="Ici Moundou" class="logo-img">
-                    </a>
                     <a href="index.html">
+                        <div class="logo-img">IM</div>
                         <span class="logo-text">Ici Moundou</span>
                     </a>
                 </div>
@@ -643,7 +662,7 @@
                     <p class="section-subtitle">Actualités, coulisses et annonces exclusives</p>
                 </div>
                 
-                <div class="facebook-wrapper">
+                <div class="facebook-wrapper" id="facebookWrapper">
                     <div class="fb-page-container">
                         <div class="fb-page" 
                              data-href="https://www.facebook.com/icimoundou" 
@@ -653,7 +672,8 @@
                              data-small-header="false" 
                              data-adapt-container-width="true" 
                              data-hide-cover="false" 
-                             data-show-facepile="true">
+                             data-show-facepile="true"
+                             data-lazy="true">
                         </div>
                     </div>
                 </div>
@@ -706,13 +726,13 @@
     </div>
 
     <script>
-        // ==================== DONNÉES AVEC VRAIS MÉDIAS ====================
+        // ==================== DONNÉES TALENTS ====================
         const talentsData = [
             {
                 id: 1,
                 nom: "Princesse K.",
                 categorie: "musique",
-                bio: "Chanteuse à la voix soul aux influences variées. Révélée sur Ici Moundou, elle mêle les rythmes traditionnels tchadiens à la soul moderne. Son énergie sur scène est inoubliable.",
+                bio: "Chanteuse à la voix soul aux influences variées. Révélée sur Ici Moundou, elle mêle les rythmes traditionnels tchadiens à la soul moderne.",
                 photo: "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=600&h=600&fit=crop",
                 videoUrl: "https://www.youtube.com/embed/7J9kx2PvK5M?autoplay=1",
                 videoType: "youtube"
@@ -721,7 +741,7 @@
                 id: 2,
                 nom: "Blaise D.",
                 categorie: "comedie",
-                bio: "Humour de rue et stand-up percutant. Ses sketchs font le tour de Moundou et des réseaux sociaux. Artiste complet, il sait captiver toutes les générations.",
+                bio: "Humour de rue et stand-up percutant. Ses sketchs font le tour de Moundou et des réseaux sociaux.",
                 photo: "https://images.unsplash.com/photo-1543269865-cbf427effbad?w=600&h=600&fit=crop",
                 videoUrl: "https://www.youtube.com/embed/AHl6x_5nFc4?autoplay=1",
                 videoType: "youtube"
@@ -730,7 +750,7 @@
                 id: 3,
                 nom: "Mamadou S.",
                 categorie: "traditionnel",
-                bio: "Maître du kora et des percussions traditionnelles. Il perpétue l'héritage musical mandingue avec une touche contemporaine. Artiste reconnu dans toute l'Afrique de l'Ouest.",
+                bio: "Maître du kora et des percussions traditionnelles. Il perpétue l'héritage musical mandingue.",
                 photo: "https://images.unsplash.com/photo-1519892300165-cb5542fb47c7?w=600&h=600&fit=crop",
                 videoUrl: "https://www.youtube.com/embed/4D33QfUD9N4?autoplay=1",
                 videoType: "youtube"
@@ -739,7 +759,7 @@
                 id: 4,
                 nom: "Fatimé Z.",
                 categorie: "mode",
-                bio: "Créatrice de mode engagée. Elle valorise les tissus locaux et les motifs traditionnels tchadiens dans ses collections. Présentée à la Fashion Week de Douala.",
+                bio: "Créatrice de mode engagée. Elle valorise les tissus locaux et les motifs traditionnels tchadiens.",
                 photo: "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=600&h=600&fit=crop",
                 videoUrl: "https://www.youtube.com/embed/xGRxZ6wOhaM?autoplay=1",
                 videoType: "youtube"
@@ -748,7 +768,7 @@
                 id: 5,
                 nom: "Junior L.",
                 categorie: "art",
-                bio: "Peintre et sculpteur contemporain. Ses œuvres interrogent l'identité tchadienne moderne et la place de la jeunesse. Exposé à N'Djaména, Paris et Bruxelles.",
+                bio: "Peintre et sculpteur contemporain. Ses œuvres interrogent l'identité tchadienne moderne.",
                 photo: "https://images.unsplash.com/photo-1518834107812-67b0b7c58434?w=600&h=600&fit=crop",
                 videoUrl: "https://www.youtube.com/embed/M7FIvfx5J10?autoplay=1",
                 videoType: "youtube"
@@ -757,7 +777,7 @@
                 id: 6,
                 nom: "Clarisse N.",
                 categorie: "musique",
-                bio: "Auteure-compositrice-interprète. Ses textes engagés parlent d'amour, de résilience et d'espoir. Son album 'Racines' a été salué par la critique.",
+                bio: "Auteure-compositrice-interprète. Ses textes engagés parlent d'amour, de résilience et d'espoir.",
                 photo: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&h=600&fit=crop",
                 videoUrl: "https://www.youtube.com/embed/LXb3EKWsInQ?autoplay=1",
                 videoType: "youtube"
@@ -766,7 +786,7 @@
                 id: 7,
                 nom: "Romain T.",
                 categorie: "comedie",
-                bio: "Stand-up performer et comédien. Il a fait rire les plus grandes scènes de N'Djaména, Douala et Abidjan. Son one-man-show 'Tchad Attitude' cartonne.",
+                bio: "Stand-up performer. Il a fait rire les plus grandes scènes de N'Djaména et Douala.",
                 photo: "https://images.unsplash.com/photo-1522529599102-193c0d76b0b6?w=600&h=600&fit=crop",
                 videoUrl: "https://www.youtube.com/embed/9bZkp7q19f0?autoplay=1",
                 videoType: "youtube"
@@ -775,27 +795,9 @@
                 id: 8,
                 nom: "Aïcha D.",
                 categorie: "traditionnel",
-                bio: "Danseuse traditionnelle et chorégraphe. Elle enseigne et transmet les danses du Sud du Tchad. Fondatrice de l'école 'Danse et Traditions'.",
+                bio: "Danseuse traditionnelle et chorégraphe. Elle transmet les danses du Sud du Tchad.",
                 photo: "https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?w=600&h=600&fit=crop",
                 videoUrl: "https://www.youtube.com/embed/5qap5aO4i9A?autoplay=1",
-                videoType: "youtube"
-            },
-            {
-                id: 9,
-                nom: "Kader M.",
-                categorie: "musique",
-                bio: "Producteur et beatmaker. Il mélange les sonorités traditionnelles tchadiennes avec le hip-hop et l'électro.",
-                photo: "https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=600&h=600&fit=crop",
-                videoUrl: "https://www.youtube.com/embed/JHxrJ0zD3LM?autoplay=1",
-                videoType: "youtube"
-            },
-            {
-                id: 10,
-                nom: "Nadège P.",
-                categorie: "mode",
-                bio: "Styliste et modéliste. Ses créations mêlent pagne traditionnel et coupes modernes. Elle habille les célébrités locales.",
-                photo: "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=600&h=600&fit=crop",
-                videoUrl: "https://www.youtube.com/embed/6y0J2lZnMvA?autoplay=1",
                 videoType: "youtube"
             }
         ];
@@ -847,27 +849,19 @@
             `;
             
             card.querySelector('.talent-card-inner').addEventListener('click', () => {
-                openVideoModal(talent.videoUrl, talent.videoType);
+                openVideoModal(talent.videoUrl);
             });
             
             return card;
         }
 
         // ==================== MODALE VIDÉO ====================
-        function openVideoModal(videoUrl, videoType) {
+        function openVideoModal(videoUrl) {
             const modal = document.getElementById('videoModal');
             const container = document.getElementById('modalVideoContainer');
-            
             if (!modal || !container) return;
             
-            let embedHtml = '';
-            if (videoType === 'youtube') {
-                embedHtml = `<iframe src="${videoUrl}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
-            } else {
-                embedHtml = `<iframe src="${videoUrl}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
-            }
-            
-            container.innerHTML = embedHtml;
+            container.innerHTML = `<iframe src="${videoUrl}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
             modal.classList.add('active');
             document.body.style.overflow = 'hidden';
         }
@@ -885,13 +879,9 @@
         // ==================== SLIDER ====================
         function renderSlider() {
             if (!sliderTrack) return;
-            
             const visibleTalents = talentsData.slice(currentIndex, currentIndex + VISIBLE_COUNT);
             sliderTrack.innerHTML = '';
-            
-            visibleTalents.forEach(talent => {
-                sliderTrack.appendChild(createTalentCard(talent));
-            });
+            visibleTalents.forEach(talent => sliderTrack.appendChild(createTalentCard(talent)));
             
             if (prevBtn) prevBtn.style.opacity = currentIndex === 0 ? '0.5' : '1';
             if (nextBtn) nextBtn.style.opacity = (currentIndex + VISIBLE_COUNT >= talentsData.length) ? '0.5' : '1';
@@ -920,20 +910,15 @@
         // ==================== TALENTS DU MOMENT ====================
         function renderTalentsMoment() {
             if (!talentsMomentGrid) return;
-            
             const firstFour = talentsData.slice(0, 4);
             talentsMomentGrid.innerHTML = '';
-            
-            firstFour.forEach(talent => {
-                talentsMomentGrid.appendChild(createTalentCard(talent));
-            });
+            firstFour.forEach(talent => talentsMomentGrid.appendChild(createTalentCard(talent)));
         }
 
         // ==================== MENU BURGER ====================
         function initBurgerMenu() {
             const burger = document.getElementById('burgerBtn');
             const menu = document.getElementById('navMenu');
-            
             if (burger && menu) {
                 burger.addEventListener('click', () => {
                     menu.classList.toggle('active');
@@ -951,11 +936,39 @@
             }
         }
 
+        // ==================== GESTION FACEBOOK (Fallback si erreur) ====================
+        function initFacebookFallback() {
+            // Attendre 5 secondes pour voir si le plugin Facebook se charge
+            setTimeout(() => {
+                const fbWidget = document.querySelector('.fb-page');
+                const fbWrapper = document.getElementById('facebookWrapper');
+                
+                // Si le widget est toujours vide ou non chargé
+                if (fbWidget && fbWrapper) {
+                    const hasContent = fbWidget.innerHTML && fbWidget.innerHTML.length > 50;
+                    if (!hasContent) {
+                        // Remplacer par un fallback
+                        fbWrapper.innerHTML = `
+                            <div class="fb-page-fallback">
+                                <i class="fab fa-facebook"></i>
+                                <h3>Suivez-nous sur Facebook</h3>
+                                <p>Retrouvez toute l'actualité des talents sur notre page Facebook.</p>
+                                <a href="https://www.facebook.com/icimoundou" target="_blank" class="btn-fb">
+                                    <i class="fab fa-facebook"></i> Voir notre page
+                                </a>
+                            </div>
+                        `;
+                    }
+                }
+            }, 5000);
+        }
+
         // ==================== INITIALISATION ====================
         document.addEventListener('DOMContentLoaded', () => {
             renderSlider();
             renderTalentsMoment();
             initBurgerMenu();
+            initFacebookFallback();
             
             if (prevBtn) prevBtn.addEventListener('click', prevSlide);
             if (nextBtn) nextBtn.addEventListener('click', nextSlide);
