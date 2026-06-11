@@ -1,0 +1,112 @@
+{
+  "talents": [
+    {
+      "id": 1,
+      "nom": "Princesse K.",
+      "categorie": "musique",
+      "bio": "Chanteuse à la voix soul aux influences variées. Révélée sur Ici Moundou, elle mêle les rythmes traditionnels tchadiens à la soul moderne. Son premier single 'N'Djaména by Night' a dépassé les 100k vues sur YouTube.",
+      "photo": "assets/images/talents/princesse-k.jpg",
+      "videoUrl": "https://www.youtube.com/embed/dQw4w9WgXcQ",
+      "videoType": "youtube"
+    },
+    {
+      "id": 2,
+      "nom": "Blaise D.",
+      "categorie": "comedie",
+      "bio": "Humour de rue et stand-up percutant. Ses sketchs font le tour de Moundou et des réseaux sociaux. Artiste complet, il sait captiver toutes les générations avec son humour intelligent et sans tabou.",
+      "photo": "assets/images/talents/blaise-d.jpg",
+      "videoUrl": "https://www.youtube.com/embed/3KkUeRPjc-Y",
+      "videoType": "youtube"
+    },
+    {
+      "id": 3,
+      "nom": "Mamadou S.",
+      "categorie": "traditionnel",
+      "bio": "Maître du kora et de la musique mandingue. Il perpétue la tradition avec une touche contemporaine. Lauréat du prix des Arts Traditionnels 2024, il a tourné dans toute l'Afrique de l'Ouest.",
+      "photo": "assets/images/talents/mamadou-s.jpg",
+      "videoUrl": "https://www.youtube.com/embed/M7FIvfx5J10",
+      "videoType": "youtube"
+    },
+    {
+      "id": 4,
+      "nom": "Fatimé Z.",
+      "categorie": "mode",
+      "bio": "Créatrice de mode engagée. Elle valorise les tissus locaux et les motifs traditionnels tchadiens dans ses collections. Présentée à la Fashion Week de Douala, elle représente fièrement le Tchad.",
+      "photo": "assets/images/talents/fatime-z.jpg",
+      "videoUrl": "https://www.youtube.com/embed/1J9nZ0jCwR8",
+      "videoType": "youtube"
+    },
+    {
+      "id": 5,
+      "nom": "Junior L.",
+      "categorie": "art",
+      "bio": "Peintre et sculpteur contemporain. Ses œuvres interrogent l'identité tchadienne moderne et la place de la jeunesse. Exposé à N'Djaména, Paris et Bruxelles. Il utilise des matériaux recyclés.",
+      "photo": "assets/images/talents/junior-l.jpg",
+      "videoUrl": "https://www.youtube.com/embed/8jqP-pYh8LQ",
+      "videoType": "youtube"
+    },
+    {
+      "id": 6,
+      "nom": "Clarisse N.",
+      "categorie": "musique",
+      "bio": "Auteure-compositrice-interprète. Ses textes engagés parlent d'amour, de résilience et d'espoir. Son album 'Racines' a été salué par la critique. Elle prépare une tournée régionale.",
+      "photo": "assets/images/talents/clarisse-n.jpg",
+      "videoUrl": "https://www.youtube.com/embed/LXb3EKWsInQ",
+      "videoType": "youtube"
+    },
+    {
+      "id": 7,
+      "nom": "Romain T.",
+      "categorie": "comedie",
+      "bio": "Stand-up performer et comédien. Il a fait rire les plus grandes scènes de N'Djaména, Douala et Abidjan. Son one-man-show 'Tchad Attitude' cartonne depuis plus d'un an.",
+      "photo": "assets/images/talents/romain-t.jpg",
+      "videoUrl": "https://www.youtube.com/embed/9bZkp7q19f0",
+      "videoType": "youtube"
+    },
+    {
+      "id": 8,
+      "nom": "Aïcha D.",
+      "categorie": "traditionnel",
+      "bio": "Danseuse traditionnelle et chorégraphe. Elle enseigne et transmet les danses du Sud du Tchad. Fondatrice de l'école 'Danse et Traditions', elle forme la nouvelle génération.",
+      "photo": "assets/images/talents/aicha-d.jpg",
+      "videoUrl": "https://www.youtube.com/embed/5qap5aO4i9A",
+      "videoType": "youtube"
+    },
+    {
+      "id": 9,
+      "nom": "Kader M.",
+      "categorie": "musique",
+      "bio": "Producteur et beatmaker. Il mélange les sonorités traditionnelles tchadiennes avec le hip-hop et l'électro. Il a produit plusieurs artistes locaux et collabore avec des studios internationaux.",
+      "photo": "assets/images/talents/kader-m.jpg",
+      "videoUrl": "https://www.youtube.com/embed/JHxrJ0zD3LM",
+      "videoType": "youtube"
+    },
+    {
+      "id": 10,
+      "nom": "Nadège P.",
+      "categorie": "mode",
+      "bio": "Styliste et modéliste. Ses créations mêlent pagne traditionnel et coupes modernes. Elle habille les célébrités locales et participe au développement de la filière textile au Tchad.",
+      "photo": "assets/images/talents/nadege-p.jpg",
+      "videoUrl": "https://www.youtube.com/embed/6y0J2lZnMvA",
+      "videoType": "youtube"
+    },
+    {
+      "id": 11,
+      "nom": "Souleymane B.",
+      "categorie": "art",
+      "bio": "Photographe documentaire. Il capture la vie quotidienne à Moundou et dans les campagnes. Ses séries photo ont été exposées à Bamako et Johannesburg. Il forme également de jeunes photographes.",
+      "photo": "assets/images/talents/souleymane-b.jpg",
+      "videoUrl": "https://www.youtube.com/embed/7J9kx2PvK5M",
+      "videoType": "youtube"
+    },
+    {
+      "id": 12,
+      "nom": "Reine H.",
+      "categorie": "musique",
+      "bio": "Chanteuse gospel et de variétés. Sa voix puissante et émouvante touche le public. Elle se produit lors des grands événements religieux et culturels du pays. Son dernier clip dépasse les 200k vues.",
+      "photo": "assets/images/talents/reine-h.jpg",
+      "videoUrl": "https://www.youtube.com/embed/CevxZvSJLk8",
+      "videoType": "youtube"
+    }
+  ]
+}
