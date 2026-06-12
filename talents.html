@@ -1,1 +1,103 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ici Moundou – Tous les talents</title>
+    <meta name="description" content="Découvrez tous les talents de Moundou : musique, comédie, art, traditionnel, mode. Filtrez par catégorie.">
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="icon" type="image/png" href="assets/images/logo.png">
+</head>
+<body>
 
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <a href="index.html"><img src="assets/images/logo.png" alt="Ici Moundou" loading="lazy"></a>
+            </div>
+            <button class="menu-toggle" aria-label="Menu"><i class="fas fa-bars"></i></button>
+            <nav class="nav">
+                <ul>
+                    <li><a href="index.html">Accueil</a></li>
+                    <li><a href="talents.html" class="active">Talents</a></li>
+                    <li><a href="videos.html">Vidéos</a></li>
+                    <li><a href="apropos.html">À propos</a></li>
+                    <li><a href="annonceurs.html">Annonceurs</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="page-header">
+            <div class="container">
+                <h1>Nos talents</h1>
+                <p>Artistes, humoristes, créateurs de mode et gardiens de la tradition.</p>
+            </div>
+        </section>
+
+        <!-- FILTRES -->
+        <section class="filters-section">
+            <div class="container">
+                <div class="filter-buttons">
+                    <button class="filter-btn active" data-category="all">Tous</button>
+                    <button class="filter-btn" data-category="musique">Musique</button>
+                    <button class="filter-btn" data-category="comedie">Comédie</button>
+                    <button class="filter-btn" data-category="art">Art</button>
+                    <button class="filter-btn" data-category="traditionnel">Traditionnel</button>
+                    <button class="filter-btn" data-category="mode">Mode</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- GRILLE DES TALENTS -->
+        <section class="talents-gallery">
+            <div class="container">
+                <div class="talents-grid" id="talentsGrid">
+                    <!-- Chargement dynamique -->
+                    <div class="loading-spinner"><i class="fas fa-spinner fa-spin"></i> Chargement...</div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- MODALE TALENT (avec vidéo embed) -->
+    <div id="talentModal" class="modal">
+        <div class="modal-content modal-lg">
+            <span class="modal-close">&times;</span>
+            <div class="modal-flex">
+                <div class="modal-image">
+                    <img id="modalPhoto" src="" alt="">
+                </div>
+                <div class="modal-info">
+                    <h2 id="modalNom"></h2>
+                    <p class="modal-category" id="modalCategorie"></p>
+                    <p id="modalBio"></p>
+                    <div class="modal-video">
+                        <div class="video-wrapper">
+                            <iframe id="modalVideo" src="" frameborder="0" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col"><img src="assets/images/logo.png" alt="Ici Moundou" class="footer-logo" loading="lazy"><p>Média des talents de Moundou.</p></div>
+                <div class="footer-col"><h4>Liens</h4><ul><li><a href="index.html">Accueil</a></li><li><a href="talents.html">Talents</a></li><li><a href="mentions.html">Mentions</a></li></ul></div>
+                <div class="footer-col"><h4>Suivez-nous</h4><p><i class="fab fa-facebook"></i> <a href="https://www.facebook.com/icimoundou">Facebook</a></p></div>
+            </div>
+            <div class="footer-bottom"><p>&copy; 2025 Ici Moundou</p></div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script src="js/talents.js"></script>
+</body>
+</html>
