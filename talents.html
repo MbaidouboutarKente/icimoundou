@@ -2,24 +2,554 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ici Moundou – Tous les talents</title>
-    <meta name="description" content="Découvrez tous les talents de Moundou : musique, comédie, art, traditionnel, mode. Filtrez par catégorie.">
-    <link rel="stylesheet" href="css/style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="icon" type="image/png" href="assets/images/logo.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="description" content="Découvrez tous les talents de Moundou – Musique, comédie, art, traditionnel, mode. Filtrez par catégorie.">
+    <title>Ici Moundou – Tous nos talents</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* ==================== REPRISE DU STYLE GLOBAL (identique à l'index) ==================== */
+        :root {
+            --primary: #0A3B5C;
+            --secondary: #E67E22;
+            --accent: #F4A261;
+            --dark: #1E2A3A;
+            --light: #F9F9F9;
+            --gray: #6C757D;
+            --white: #FFFFFF;
+            --shadow: 0 4px 12px rgba(0,0,0,0.08);
+            --shadow-hover: 0 8px 24px rgba(0,0,0,0.12);
+            --border-radius: 12px;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--dark);
+            background-color: var(--white);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Segoe UI', 'Montserrat', system-ui, sans-serif;
+            font-weight: 700;
+            line-height: 1.3;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Header */
+        .header {
+            background: var(--white);
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo img {
+            margin-right: 10px;
+        }
+
+        .logo a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .logo-img {
+            height: 48px;
+            width: 48px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 32px;
+        }
+
+        .nav-menu a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 600;
+            transition: var(--transition);
+            padding: 8px 0;
+        }
+
+        .nav-menu a:hover,
+        .nav-menu a.active {
+            color: var(--secondary);
+            border-bottom: 2px solid var(--secondary);
+        }
+
+        .burger-menu {
+            display: none;
+            flex-direction: column;
+            gap: 6px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        .burger-line {
+            width: 28px;
+            height: 2px;
+            background: var(--primary);
+            transition: var(--transition);
+        }
+
+        /* Boutons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 28px;
+            border-radius: 40px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: var(--transition);
+            cursor: pointer;
+            border: none;
+            font-family: inherit;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        /* Page Header */
+        .page-header {
+            background: linear-gradient(135deg, var(--primary) 0%, #1a5a7a 100%);
+            color: var(--white);
+            text-align: center;
+            padding: 60px 24px;
+            margin-bottom: 40px;
+        }
+
+        .page-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 16px;
+        }
+
+        .page-header p {
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+            opacity: 0.95;
+        }
+
+        /* Filtres */
+        .filters-section {
+            margin-bottom: 40px;
+        }
+
+        .filter-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .filter-btn {
+            padding: 10px 24px;
+            background: var(--light);
+            border: none;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: inherit;
+        }
+
+        .filter-btn:hover {
+            background: var(--secondary);
+            color: var(--white);
+        }
+
+        .filter-btn.active {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        /* Grille talents */
+        .talents-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        .talent-card {
+            background: var(--white);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .talent-card:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .talent-img-wrapper {
+            position: relative;
+            overflow: hidden;
+            aspect-ratio: 1 / 1;
+            background: linear-gradient(135deg, #f5f5f5, #e0e0e0);
+        }
+
+        .talent-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s;
+        }
+
+        .talent-card:hover .talent-img {
+            transform: scale(1.05);
+        }
+
+        .talent-category-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: var(--secondary);
+            color: var(--white);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            backdrop-filter: blur(4px);
+        }
+
+        .talent-info {
+            padding: 20px;
+        }
+
+        .talent-name {
+            font-size: 1.2rem;
+            margin-bottom: 8px;
+            color: var(--primary);
+        }
+
+        .talent-bio {
+            font-size: 0.85rem;
+            color: var(--gray);
+            line-height: 1.5;
+        }
+
+        /* Modale */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            position: relative;
+            width: 90%;
+            max-width: 1000px;
+            background: var(--white);
+            border-radius: 16px;
+            overflow: hidden;
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .modal-image {
+            flex: 1;
+            min-width: 250px;
+            background: var(--dark);
+        }
+
+        .modal-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .modal-info {
+            flex: 1;
+            padding: 30px;
+        }
+
+        .modal-info h2 {
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .modal-category {
+            color: var(--secondary);
+            font-weight: 600;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+        }
+
+        .modal-bio {
+            color: var(--gray);
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+
+        .modal-video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            margin-top: 20px;
+        }
+
+        .modal-video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 8px;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--secondary);
+            color: var(--white);
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            z-index: 10;
+        }
+
+        .modal-close:hover {
+            background: var(--primary);
+            transform: scale(1.1);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--dark);
+            color: var(--light);
+            padding: 48px 0 24px;
+            margin-top: 60px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-col h4 {
+            color: var(--white);
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+        }
+
+        .footer-col ul {
+            list-style: none;
+        }
+
+        .footer-col ul li {
+            margin-bottom: 12px;
+        }
+
+        .footer-col a {
+            color: var(--light);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-col a:hover {
+            color: var(--secondary);
+        }
+
+        .contact-info li {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .contact-info i {
+            width: 24px;
+            color: var(--secondary);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 24px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            font-size: 0.85rem;
+        }
+
+        .loading-spinner {
+            text-align: center;
+            padding: 60px;
+            color: var(--gray);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .talents-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .burger-menu {
+                display: flex;
+            }
+            .nav-menu {
+                display: none;
+                position: absolute;
+                top: 80px;
+                left: 0;
+                right: 0;
+                background: var(--white);
+                flex-direction: column;
+                padding: 20px;
+                gap: 16px;
+                box-shadow: var(--shadow);
+                text-align: center;
+            }
+            .nav-menu.active {
+                display: flex;
+            }
+            .talents-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 20px;
+            }
+            .footer-grid {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            .modal-content {
+                flex-direction: column;
+                max-height: 90vh;
+                overflow-y: auto;
+            }
+            .modal-image {
+                max-height: 250px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .talents-grid {
+                grid-template-columns: 1fr;
+            }
+            .page-header h1 {
+                font-size: 1.8rem;
+            }
+            .filter-buttons {
+                gap: 8px;
+            }
+            .filter-btn {
+                padding: 6px 16px;
+                font-size: 0.85rem;
+            }
+        }
+    </style>
 </head>
 <body>
 
     <header class="header">
         <div class="container">
-            <div class="logo">
-                <a href="index.html"><img src="assets/images/logo.png" alt="Ici Moundou" loading="lazy"></a>
-            </div>
-            <button class="menu-toggle" aria-label="Menu"><i class="fas fa-bars"></i></button>
-            <nav class="nav">
-                <ul>
+            <nav class="navbar">
+                <div class="logo">
+                    <a href="assets/images/logo.png" class="img">
+                        <img src="assets/images/logo.png" alt="Ici Moundou" class="logo-img">
+                    </a>
+                    <a href="index.html">
+                        <span class="logo-text">Ici Moundou</span>
+                    </a>
+                </div>
+                
+                <button class="burger-menu" id="burgerBtn" aria-label="Menu">
+                    <span class="burger-line"></span>
+                    <span class="burger-line"></span>
+                    <span class="burger-line"></span>
+                </button>
+                
+                <ul class="nav-menu" id="navMenu">
                     <li><a href="index.html">Accueil</a></li>
                     <li><a href="talents.html" class="active">Talents</a></li>
                     <li><a href="videos.html">Vidéos</a></li>
@@ -35,69 +565,336 @@
         <section class="page-header">
             <div class="container">
                 <h1>Nos talents</h1>
-                <p>Artistes, humoristes, créateurs de mode et gardiens de la tradition.</p>
+                <p>Découvrez les artistes, créateurs et performeurs qui font rayonner Moundou</p>
             </div>
         </section>
 
-        <!-- FILTRES -->
         <section class="filters-section">
             <div class="container">
-                <div class="filter-buttons">
+                <div class="filter-buttons" id="filterButtons">
                     <button class="filter-btn active" data-category="all">Tous</button>
-                    <button class="filter-btn" data-category="musique">Musique</button>
-                    <button class="filter-btn" data-category="comedie">Comédie</button>
-                    <button class="filter-btn" data-category="art">Art</button>
-                    <button class="filter-btn" data-category="traditionnel">Traditionnel</button>
-                    <button class="filter-btn" data-category="mode">Mode</button>
+                    <button class="filter-btn" data-category="musique">🎵 Musique</button>
+                    <button class="filter-btn" data-category="comedie">🎭 Comédie</button>
+                    <button class="filter-btn" data-category="art">🎨 Art</button>
+                    <button class="filter-btn" data-category="traditionnel">🏺 Traditionnel</button>
+                    <button class="filter-btn" data-category="mode">👗 Mode</button>
                 </div>
             </div>
         </section>
 
-        <!-- GRILLE DES TALENTS -->
-        <section class="talents-gallery">
+        <section class="talents-section">
             <div class="container">
                 <div class="talents-grid" id="talentsGrid">
-                    <!-- Chargement dynamique -->
-                    <div class="loading-spinner"><i class="fas fa-spinner fa-spin"></i> Chargement...</div>
+                    <div class="loading-spinner"><i class="fas fa-spinner fa-spin"></i> Chargement des talents...</div>
                 </div>
             </div>
         </section>
     </main>
 
-    <!-- MODALE TALENT (avec vidéo embed) -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4>Navigation</h4>
+                    <ul>
+                        <li><a href="index.html">Accueil</a></li>
+                        <li><a href="talents.html">Talents</a></li>
+                        <li><a href="videos.html">Vidéos</a></li>
+                        <li><a href="apropos.html">À propos</a></li>
+                        <li><a href="annonceurs.html">Annonceurs</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                        <li><a href="mentions.html">Mentions légales</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-col">
+                    <h4>Contact rapide</h4>
+                    <ul class="contact-info">
+                        <li><i class="fas fa-envelope"></i> <a href="mailto:contact@icimoundou.com">contact@icimoundou.com</a></li>
+                        <li><i class="fab fa-whatsapp"></i> <a href="https://wa.me/23560000000" target="_blank">+235 60 00 00 00</a></li>
+                        <li><i class="fab fa-facebook"></i> <a href="https://facebook.com/icimoundou" target="_blank">/icimoundou</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-col">
+                    <h4>Le média des talents</h4>
+                    <p>Découvrez chaque semaine les nouveaux talents qui font bouger Moundou et toute la scène culturelle tchadienne.</p>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2026 Ici Moundou – Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modale talent -->
     <div id="talentModal" class="modal">
-        <div class="modal-content modal-lg">
-            <span class="modal-close">&times;</span>
-            <div class="modal-flex">
-                <div class="modal-image">
-                    <img id="modalPhoto" src="" alt="">
-                </div>
-                <div class="modal-info">
-                    <h2 id="modalNom"></h2>
-                    <p class="modal-category" id="modalCategorie"></p>
-                    <p id="modalBio"></p>
-                    <div class="modal-video">
-                        <div class="video-wrapper">
-                            <iframe id="modalVideo" src="" frameborder="0" allowfullscreen></iframe>
-                        </div>
-                    </div>
-                </div>
+        <div class="modal-content">
+            <button class="modal-close" id="closeModalBtn">&times;</button>
+            <div class="modal-image">
+                <img id="modalImage" src="" alt="">
+            </div>
+            <div class="modal-info">
+                <h2 id="modalName"></h2>
+                <p class="modal-category" id="modalCategory"></p>
+                <p class="modal-bio" id="modalBio"></p>
+                <div class="modal-video-wrapper" id="modalVideoWrapper"></div>
             </div>
         </div>
     </div>
 
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-grid">
-                <div class="footer-col"><img src="assets/images/logo.png" alt="Ici Moundou" class="footer-logo" loading="lazy"><p>Média des talents de Moundou.</p></div>
-                <div class="footer-col"><h4>Liens</h4><ul><li><a href="index.html">Accueil</a></li><li><a href="talents.html">Talents</a></li><li><a href="mentions.html">Mentions</a></li></ul></div>
-                <div class="footer-col"><h4>Suivez-nous</h4><p><i class="fab fa-facebook"></i> <a href="https://www.facebook.com/icimoundou">Facebook</a></p></div>
-            </div>
-            <div class="footer-bottom"><p>&copy; 2025 Ici Moundou</p></div>
-        </div>
-    </footer>
+    <script>
+        // ==================== DONNÉES DES TALENTS ====================
+        const talentsData = [
+            {
+                id: 1,
+                nom: "Princesse K.",
+                categorie: "musique",
+                bio: "Chanteuse à la voix soul aux influences variées. Révélée sur Ici Moundou, elle mêle les rythmes traditionnels tchadiens à la soul moderne. Son énergie sur scène est inoubliable.",
+                photo: "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=600&h=600&fit=crop",
+                videoUrl: "https://www.youtube.com/embed/7J9kx2PvK5M?autoplay=1",
+                videoType: "youtube"
+            },
+            {
+                id: 2,
+                nom: "Blaise D.",
+                categorie: "comedie",
+                bio: "Humour de rue et stand-up percutant. Ses sketchs font le tour de Moundou et des réseaux sociaux. Artiste complet, il sait captiver toutes les générations.",
+                photo: "https://images.unsplash.com/photo-1543269865-cbf427effbad?w=600&h=600&fit=crop",
+                videoUrl: "https://www.youtube.com/embed/AHl6x_5nFc4?autoplay=1",
+                videoType: "youtube"
+            },
+            {
+                id: 3,
+                nom: "Mamadou S.",
+                categorie: "traditionnel",
+                bio: "Maître du kora et des percussions traditionnelles. Il perpétue l'héritage musical mandingue avec une touche contemporaine. Artiste reconnu dans toute l'Afrique de l'Ouest.",
+                photo: "https://images.unsplash.com/photo-1519892300165-cb5542fb47c7?w=600&h=600&fit=crop",
+                videoUrl: "https://www.youtube.com/embed/4D33QfUD9N4?autoplay=1",
+                videoType: "youtube"
+            },
+            {
+                id: 4,
+                nom: "Fatimé Z.",
+                categorie: "mode",
+                bio: "Créatrice de mode engagée. Elle valorise les tissus locaux et les motifs traditionnels tchadiens dans ses collections. Présentée à la Fashion Week de Douala.",
+                photo: "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=600&h=600&fit=crop",
+                videoUrl: "https://www.youtube.com/embed/xGRxZ6wOhaM?autoplay=1",
+                videoType: "youtube"
+            },
+            {
+                id: 5,
+                nom: "Junior L.",
+                categorie: "art",
+                bio: "Peintre et sculpteur contemporain. Ses œuvres interrogent l'identité tchadienne moderne et la place de la jeunesse. Exposé à N'Djaména, Paris et Bruxelles.",
+                photo: "https://images.unsplash.com/photo-1518834107812-67b0b7c58434?w=600&h=600&fit=crop",
+                videoUrl: "https://www.youtube.com/embed/M7FIvfx5J10?autoplay=1",
+                videoType: "youtube"
+            },
+            {
+                id: 6,
+                nom: "Clarisse N.",
+                categorie: "musique",
+                bio: "Auteure-compositrice-interprète. Ses textes engagés parlent d'amour, de résilience et d'espoir. Son album 'Racines' a été salué par la critique.",
+                photo: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&h=600&fit=crop",
+                videoUrl: "https://www.youtube.com/embed/LXb3EKWsInQ?autoplay=1",
+                videoType: "youtube"
+            },
+            {
+                id: 7,
+                nom: "Romain T.",
+                categorie: "comedie",
+                bio: "Stand-up performer et comédien. Il a fait rire les plus grandes scènes de N'Djaména, Douala et Abidjan. Son one-man-show 'Tchad Attitude' cartonne.",
+                photo: "https://images.unsplash.com/photo-1522529599102-193c0d76b0b6?w=600&h=600&fit=crop",
+                videoUrl: "https://www.youtube.com/embed/9bZkp7q19f0?autoplay=1",
+                videoType: "youtube"
+            },
+            {
+                id: 8,
+                nom: "Aïcha D.",
+                categorie: "traditionnel",
+                bio: "Danseuse traditionnelle et chorégraphe. Elle enseigne et transmet les danses du Sud du Tchad. Fondatrice de l'école 'Danse et Traditions'.",
+                photo: "https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?w=600&h=600&fit=crop",
+                videoUrl: "https://www.youtube.com/embed/5qap5aO4i9A?autoplay=1",
+                videoType: "youtube"
+            },
+            {
+                id: 9,
+                nom: "Kader M.",
+                categorie: "musique",
+                bio: "Producteur et beatmaker. Il mélange les sonorités traditionnelles tchadiennes avec le hip-hop et l'électro.",
+                photo: "https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=600&h=600&fit=crop",
+                videoUrl: "https://www.youtube.com/embed/JHxrJ0zD3LM?autoplay=1",
+                videoType: "youtube"
+            },
+            {
+                id: 10,
+                nom: "Nadège P.",
+                categorie: "mode",
+                bio: "Styliste et modéliste. Ses créations mêlent pagne traditionnel et coupes modernes. Elle habille les célébrités locales.",
+                photo: "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=600&h=600&fit=crop",
+                videoUrl: "https://www.youtube.com/embed/6y0J2lZnMvA?autoplay=1",
+                videoType: "youtube"
+            }
+        ];
 
-    <script src="js/main.js"></script>
-    <script src="js/talents.js"></script>
+        // Variables
+        let currentCategory = 'all';
+
+        // Helper
+        function escapeHtml(str) {
+            if (!str) return '';
+            const div = document.createElement('div');
+            div.textContent = str;
+            return div.innerHTML;
+        }
+
+        function getCategoryEmoji(categorie) {
+            const emojis = {
+                'musique': '🎵',
+                'comedie': '🎭',
+                'art': '🎨',
+                'traditionnel': '🏺',
+                'mode': '👗'
+            };
+            return emojis[categorie] || '✨';
+        }
+
+        // Création carte talent
+        function createTalentCard(talent) {
+            const card = document.createElement('div');
+            card.className = 'talent-card';
+            card.dataset.id = talent.id;
+            
+            card.innerHTML = `
+                <div class="talent-img-wrapper">
+                    <img src="${talent.photo}" alt="${escapeHtml(talent.nom)}" class="talent-img" loading="lazy">
+                    <span class="talent-category-badge">${getCategoryEmoji(talent.categorie)} ${talent.categorie}</span>
+                </div>
+                <div class="talent-info">
+                    <h3 class="talent-name">${escapeHtml(talent.nom)}</h3>
+                    <p class="talent-bio">${escapeHtml(talent.bio.substring(0, 80))}${talent.bio.length > 80 ? '...' : ''}</p>
+                </div>
+            `;
+            
+            card.addEventListener('click', () => openTalentModal(talent));
+            return card;
+        }
+
+        // Affichage grille filtrée
+        function renderTalents() {
+            const grid = document.getElementById('talentsGrid');
+            if (!grid) return;
+            
+            let filtered = talentsData;
+            if (currentCategory !== 'all') {
+                filtered = talentsData.filter(t => t.categorie === currentCategory);
+            }
+            
+            if (filtered.length === 0) {
+                grid.innerHTML = '<div class="loading-spinner">Aucun talent dans cette catégorie pour le moment.</div>';
+                return;
+            }
+            
+            grid.innerHTML = '';
+            filtered.forEach(talent => {
+                grid.appendChild(createTalentCard(talent));
+            });
+        }
+
+        // Ouverture modale talent
+        function openTalentModal(talent) {
+            const modal = document.getElementById('talentModal');
+            const modalImage = document.getElementById('modalImage');
+            const modalName = document.getElementById('modalName');
+            const modalCategory = document.getElementById('modalCategory');
+            const modalBio = document.getElementById('modalBio');
+            const modalVideoWrapper = document.getElementById('modalVideoWrapper');
+            
+            modalImage.src = talent.photo;
+            modalImage.alt = talent.nom;
+            modalName.textContent = talent.nom;
+            modalCategory.textContent = `${getCategoryEmoji(talent.categorie)} ${talent.categorie}`;
+            modalBio.textContent = talent.bio;
+            
+            let embedHtml = '';
+            if (talent.videoType === 'youtube') {
+                embedHtml = `<iframe src="${talent.videoUrl}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+            } else {
+                embedHtml = `<iframe src="${talent.videoUrl}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+            }
+            modalVideoWrapper.innerHTML = embedHtml;
+            
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeTalentModal() {
+            const modal = document.getElementById('talentModal');
+            const modalVideoWrapper = document.getElementById('modalVideoWrapper');
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+            if (modalVideoWrapper) modalVideoWrapper.innerHTML = '';
+        }
+
+        // Menu burger
+        function initBurgerMenu() {
+            const burger = document.getElementById('burgerBtn');
+            const menu = document.getElementById('navMenu');
+            
+            if (burger && menu) {
+                burger.addEventListener('click', () => {
+                    menu.classList.toggle('active');
+                    const lines = burger.querySelectorAll('.burger-line');
+                    if (menu.classList.contains('active')) {
+                        lines[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
+                        lines[1].style.opacity = '0';
+                        lines[2].style.transform = 'rotate(-45deg) translate(7px, -6px)';
+                    } else {
+                        lines[0].style.transform = 'none';
+                        lines[1].style.opacity = '1';
+                        lines[2].style.transform = 'none';
+                    }
+                });
+            }
+        }
+
+        // Initialisation des filtres
+        function initFilters() {
+            const filterBtns = document.querySelectorAll('.filter-btn');
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    filterBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    currentCategory = btn.dataset.category;
+                    renderTalents();
+                });
+            });
+        }
+
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', () => {
+            renderTalents();
+            initBurgerMenu();
+            initFilters();
+            
+            const modal = document.getElementById('talentModal');
+            const closeBtn = document.getElementById('closeModalBtn');
+            
+            if (closeBtn) closeBtn.addEventListener('click', closeTalentModal);
+            if (modal) {
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) closeTalentModal();
+                });
+            }
+            
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && modal && modal.classList.contains('active')) {
+                    closeTalentModal();
+                }
+            });
+        });
+    </script>
 </body>
 </html>
