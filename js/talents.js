@@ -1,264 +1,211 @@
-/**
- * talents.js - Gestion de la page talents.html
- * Filtrage, grille dynamique, modale vidéo
- */
-
-// Variables globales
 let allTalents = [];
-let currentTalentId = null;
+let currentFilter = 'all';
 
-// Éléments DOM
-const talentsGrid = document.getElementById('talentsGrid');
-const filterButtons = document.querySelectorAll('.filter-btn');
-const modal = document.getElementById('talentModal');
-const modalContent = document.getElementById('modalContent');
-const closeModalBtn = document.getElementById('closeModalBtn');
-
-// ==================== CHARGEMENT DES TALENTS ====================
+// Charger les talents
 async function loadTalents() {
     try {
         const response = await fetch('data/talents.json');
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
-        
         const data = await response.json();
-        
-        // Support des deux structures
-        if (Array.isArray(data)) {
-            allTalents = data;
-        } else if (data.talents && Array.isArray(data.talents)) {
-            allTalents = data.talents;
-        } else {
-            throw new Error('Format JSON invalide');
+        allTalents = data.talents;
+        initSlider();      // slider accueil
+        displayFeaturedTalents(); // 4 talents du moment
+        if (document.getElementById('talentsGrid')) {
+            filterTalents('all');
         }
-        
-        // Afficher tous les talents au chargement
-        displayTalents(allTalents);
-        
     } catch (error) {
         console.error('Erreur chargement talents:', error);
-        displayErrorMessage('Impossible de charger les talents. Veuillez réessayer plus tard.');
     }
 }
 
-// ==================== AFFICHAGE DE LA GRILLE ====================
-function displayTalents(talents) {
-    if (!talentsGrid) return;
-    
-    if (talents.length === 0) {
-        talentsGrid.innerHTML = '<div class="no-results">Aucun talent trouvé dans cette catégorie</div>';
+// SLIDER (accueil)
+function initSlider() {
+    const sliderTrack = document.getElementById('sliderTrack');
+    if (!sliderTrack) return;
+    const firstThree = allTalents.slice(0, 3);
+    sliderTrack.innerHTML = '';
+    firstThree.forEach(talent => {
+        const card = document.createElement('div');
+        card.className = 'slider-card';
+        card.innerHTML = `
+            <img src="${talent.photo}" alt="${talent.nom}" loading="lazy">
+            <h3>${talent.nom}</h3>
+            <p>${talent.categorie}</p>
+            <button class="btn btn-outline watch-video" data-id="${talent.id}">Voir vidéo</button>
+        `;
+        sliderTrack.appendChild(card);
+    });
+    // Gestion des clics vidéo slider
+    document.querySelectorAll('.watch-video').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const id = parseInt(btn.dataset.id);
+            const talent = allTalents.find(t => t.id === id);
+            if (talent) openVideoModal(talent);
+        });
+    });
+    let currentIndex = 0;
+    const total = firstThree.length;
+    function updateSlider() {
+        const offset = -currentIndex * 100;
+        sliderTrack.style.transform = `translateX(${offset}%)`;
+        updateDots();
+    }
+    function updateDots() {
+        const dotsContainer = document.getElementById('sliderDots');
+        if (!dotsContainer) return;
+        dotsContainer.innerHTML = '';
+        for (let i = 0; i < total; i++) {
+            const dot = document.createElement('div');
+            dot.classList.add('dot');
+            if (i === currentIndex) dot.classList.add('active');
+            dot.addEventListener('click', () => {
+                currentIndex = i;
+                updateSlider();
+            });
+            dotsContainer.appendChild(dot);
+        }
+    }
+    window.nextSlide = () => {
+        currentIndex = (currentIndex + 1) % total;
+        updateSlider();
+    };
+    window.prevSlide = () => {
+        currentIndex = (currentIndex - 1 + total) % total;
+        updateSlider();
+    };
+    const nextBtn = document.querySelector('.slider-btn.next');
+    const prevBtn = document.querySelector('.slider-btn.prev');
+    if (nextBtn) nextBtn.onclick = () => window.nextSlide();
+    if (prevBtn) prevBtn.onclick = () => window.prevSlide();
+    updateSlider();
+}
+
+// Affichage 4 talents du moment
+function displayFeaturedTalents() {
+    const featuredGrid = document.getElementById('featuredGrid');
+    if (!featuredGrid) return;
+    const featured = allTalents.slice(0, 4);
+    featuredGrid.innerHTML = '';
+    featured.forEach(talent => {
+        const card = document.createElement('div');
+        card.className = 'talent-card';
+        card.innerHTML = `
+            <img src="${talent.photo}" alt="${talent.nom}" loading="lazy">
+            <div class="info">
+                <h3>${talent.nom}</h3>
+                <p class="category">${talent.categorie}</p>
+                <p class="bio">${talent.bio.substring(0, 80)}...</p>
+            </div>
+        `;
+        card.addEventListener('click', () => openVideoModal(talent));
+        featuredGrid.appendChild(card);
+    });
+}
+
+// Ouvre modale vidéo (depuis index, talents)
+function openVideoModal(talent) {
+    const modal = document.getElementById('videoModal') || document.getElementById('talentModal');
+    if (!modal) return;
+    let iframe, nameSpan, bioP;
+    if (modal.id === 'videoModal') {
+        iframe = document.getElementById('modalVideoIframe');
+        nameSpan = document.getElementById('modalTalentName');
+        bioP = document.getElementById('modalTalentBio');
+    } else {
+        iframe = document.getElementById('modalVideo');
+        nameSpan = document.getElementById('modalNom');
+        bioP = document.getElementById('modalBio');
+        const modalImg = document.getElementById('modalPhoto');
+        const modalCat = document.getElementById('modalCategorie');
+        if (modalImg) modalImg.src = talent.photo;
+        if (modalCat) modalCat.innerText = talent.categorie;
+    }
+    if (nameSpan) nameSpan.innerText = talent.nom;
+    if (bioP) bioP.innerText = talent.bio;
+    let embedUrl = '';
+    if (talent.videoType === 'youtube') {
+        embedUrl = talent.videoUrl.includes('embed') ? talent.videoUrl : talent.videoUrl.replace('watch?v=', 'embed/');
+    } else if (talent.videoType === 'facebook') {
+        embedUrl = talent.videoUrl;
+    }
+    if (iframe) iframe.src = embedUrl;
+    modal.style.display = 'flex';
+}
+
+// Filtrage pour talents.html
+async function filterTalents(category) {
+    currentFilter = category;
+    const grid = document.getElementById('talentsGrid');
+    if (!grid) return;
+    let filtered = allTalents;
+    if (category !== 'all') {
+        filtered = allTalents.filter(t => t.categorie === category);
+    }
+    grid.innerHTML = '';
+    if (filtered.length === 0) {
+        grid.innerHTML = '<p>Aucun talent dans cette catégorie.</p>';
         return;
     }
-    
-    talentsGrid.innerHTML = '';
-    
-    talents.forEach(talent => {
-        const card = createTalentCard(talent);
-        talentsGrid.appendChild(card);
-    });
-    
-    // Réinitialiser les animations sur les nouvelles cartes
-    if (typeof revealAnimatedElements !== 'undefined') {
-        revealAnimatedElements();
-    }
-}
-
-// Création d'une carte talent
-function createTalentCard(talent) {
-    const card = document.createElement('div');
-    card.className = 'talent-card';
-    card.setAttribute('data-id', talent.id);
-    card.setAttribute('data-category', talent.categorie);
-    
-    const categoryLabels = {
-        'musique': 'Musique',
-        'comedie': 'Comédie',
-        'art': 'Art',
-        'traditionnel': 'Traditionnel',
-        'mode': 'Mode'
-    };
-    const categoryDisplay = categoryLabels[talent.categorie] || talent.categorie;
-    
-    // Troncature de la bio (50 mots max)
-    const bioShort = truncateWords(talent.bio, 50);
-    
-    card.innerHTML = `
-        <div class="talent-card-inner" onclick="openModal(${talent.id})">
-            <div class="talent-img-wrapper">
-                <img src="${talent.photo || 'assets/images/placeholder.jpg'}" 
-                     alt="${escapeHtml(talent.nom)}" 
-                     class="talent-img"
-                     loading="lazy"
-                     onerror="this.src='assets/images/placeholder.jpg'">
-                <span class="talent-category-badge">${categoryDisplay}</span>
+    filtered.forEach(talent => {
+        const card = document.createElement('div');
+        card.className = 'talent-card';
+        card.innerHTML = `
+            <img src="${talent.photo}" alt="${talent.nom}" loading="lazy">
+            <div class="info">
+                <h3>${talent.nom}</h3>
+                <p class="category">${talent.categorie}</p>
+                <p class="bio">${talent.bio.substring(0, 100)}</p>
             </div>
-            <div class="talent-info">
-                <h3 class="talent-name">${escapeHtml(talent.nom)}</h3>
-                <p class="talent-bio">${escapeHtml(bioShort)}</p>
-            </div>
-        </div>
-    `;
-    
-    return card;
-}
-
-// Troncature d'un texte à X mots
-function truncateWords(text, maxWords) {
-    if (!text) return '';
-    const words = text.split(' ');
-    if (words.length <= maxWords) return text;
-    return words.slice(0, maxWords).join(' ') + '...';
-}
-
-// ==================== FILTRAGE ====================
-function filterTalents(category) {
-    if (!allTalents.length) return;
-    
-    let filteredTalents;
-    
-    if (category === 'all') {
-        filteredTalents = allTalents;
-    } else {
-        filteredTalents = allTalents.filter(talent => talent.categorie === category);
-    }
-    
-    displayTalents(filteredTalents);
-    
-    // Mettre à jour l'état actif des boutons
-    filterButtons.forEach(btn => {
-        if (btn.dataset.category === category) {
-            btn.classList.add('active');
-        } else {
-            btn.classList.remove('active');
-        }
+        `;
+        card.addEventListener('click', () => openTalentModal(talent));
+        grid.appendChild(card);
     });
 }
 
-// ==================== MODALE ====================
-function openModal(talentId) {
-    const talent = allTalents.find(t => t.id === talentId);
-    if (!talent) return;
-    
-    currentTalentId = talentId;
-    
-    if (!modal || !modalContent) return;
-    
-    // Générer le contenu de la modale
-    const categoryLabels = {
-        'musique': 'Musique',
-        'comedie': 'Comédie',
-        'art': 'Art',
-        'traditionnel': 'Traditionnel',
-        'mode': 'Mode'
-    };
-    
-    // Générer l'embed vidéo selon le type
-    let videoEmbed = '';
-    if (talent.videoUrl) {
-        if (talent.videoType === 'youtube') {
-            videoEmbed = `<iframe src="${talent.videoUrl}?autoplay=1&rel=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
-        } else if (talent.videoType === 'facebook') {
-            videoEmbed = `<iframe src="${talent.videoUrl}&autoplay=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
-        } else {
-            // Détection automatique
-            if (talent.videoUrl.includes('youtube.com/embed')) {
-                videoEmbed = `<iframe src="${talent.videoUrl}?autoplay=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
-            } else {
-                videoEmbed = `<iframe src="${talent.videoUrl}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
-            }
-        }
-    }
-    
-    modalContent.innerHTML = `
-        <div class="modal-layout">
-            <div class="modal-video">
-                ${videoEmbed || '<div class="no-video">Vidéo non disponible</div>'}
-            </div>
-            <div class="modal-info">
-                <div class="modal-header">
-                    <img src="${talent.photo || 'assets/images/placeholder.jpg'}" 
-                         alt="${escapeHtml(talent.nom)}"
-                         onerror="this.src='assets/images/placeholder.jpg'">
-                    <div class="modal-header-text">
-                        <h2>${escapeHtml(talent.nom)}</h2>
-                        <span class="modal-category">${categoryLabels[talent.categorie] || talent.categorie}</span>
-                    </div>
-                </div>
-                <div class="modal-bio">
-                    <h3>Biographie</h3>
-                    <p>${escapeHtml(talent.bio)}</p>
-                </div>
-            </div>
-        </div>
-    `;
-    
-    modal.classList.add('active');
-    document.body.style.overflow = 'hidden';
-}
-
-function closeModal() {
+function openTalentModal(talent) {
+    const modal = document.getElementById('talentModal');
     if (!modal) return;
-    modal.classList.remove('active');
-    document.body.style.overflow = '';
-    
-    // Nettoyer le contenu vidéo (arrêter la lecture)
-    if (modalContent) {
-        modalContent.innerHTML = '';
+    document.getElementById('modalPhoto').src = talent.photo;
+    document.getElementById('modalNom').innerText = talent.nom;
+    document.getElementById('modalCategorie').innerText = talent.categorie;
+    document.getElementById('modalBio').innerText = talent.bio;
+    let embed = '';
+    if (talent.videoType === 'youtube') {
+        embed = talent.videoUrl.includes('embed') ? talent.videoUrl : talent.videoUrl.replace('watch?v=', 'embed/');
+    } else {
+        embed = talent.videoUrl;
     }
-    currentTalentId = null;
+    document.getElementById('modalVideo').src = embed;
+    modal.style.display = 'flex';
 }
 
-// ==================== INITIALISATION ====================
-function initTalentsPage() {
-    // Charger les talents
-    loadTalents();
-    
-    // Ajouter les écouteurs sur les boutons de filtre
-    filterButtons.forEach(btn => {
-        btn.addEventListener('click', () => {
-            const category = btn.dataset.category;
-            filterTalents(category);
-        });
-    });
-    
-    // Modale : fermeture
-    if (closeModalBtn) {
-        closeModalBtn.addEventListener('click', closeModal);
-    }
-    
-    if (modal) {
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) closeModal();
+// Initialisation filtres
+function initFilters() {
+    const btns = document.querySelectorAll('.filter-btn');
+    if (btns.length) {
+        btns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                btns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                const cat = btn.dataset.category;
+                filterTalents(cat);
+            });
         });
     }
-    
-    // Fermeture avec touche Échap
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && modal && modal.classList.contains('active')) {
-            closeModal();
+}
+
+// Fermeture modales
+document.querySelectorAll('.modal-close').forEach(closeBtn => {
+    closeBtn.addEventListener('click', () => {
+        const modal = closeBtn.closest('.modal');
+        if (modal) {
+            modal.style.display = 'none';
+            const iframe = modal.querySelector('iframe');
+            if (iframe) iframe.src = '';
         }
     });
-}
+});
 
-// Exporter les fonctions pour usage global
-window.openModal = openModal;
-window.closeModal = closeModal;
-window.filterTalents = filterTalents;
-
-// Lancer l'initialisation si on est sur la page talents
-if (document.getElementById('talentsGrid')) {
-    document.addEventListener('DOMContentLoaded', initTalentsPage);
-}
-
-// ==================== UTILITAIRES ====================
-function escapeHtml(str) {
-    if (!str) return '';
-    const div = document.createElement('div');
-    div.textContent = str;
-    return div.innerHTML;
-}
-
-function displayErrorMessage(message) {
-    if (talentsGrid) {
-        talentsGrid.innerHTML = `<div class="error-message"><i class="fas fa-exclamation-triangle"></i> ${message}</div>`;
-    }
-}
+document.addEventListener('DOMContentLoaded', () => {
+    loadTalents();
+    initFilters();
+});
