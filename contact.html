@@ -69,10 +69,7 @@
         .logo {
             display: flex;
             align-items: center;
-        }
-
-        .logo img {
-            margin-right: 10px;
+            gap: 12px;
         }
 
         .logo a {
@@ -228,21 +225,48 @@
             box-shadow: var(--shadow-hover);
         }
 
+        .btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
         .form-feedback {
             margin-top: 20px;
-            padding: 12px;
+            padding: 14px;
             border-radius: 8px;
             text-align: center;
+            font-size: 0.95rem;
+            animation: fadeInUp 0.3s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .form-feedback.success {
             background: #d4edda;
             color: #155724;
+            border-left: 4px solid #28a745;
         }
 
         .form-feedback.error {
             background: #f8d7da;
             color: #721c24;
+            border-left: 4px solid #dc3545;
+        }
+
+        .form-feedback.info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border-left: 4px solid #17a2b8;
         }
 
         /* Infos contact */
@@ -416,10 +440,10 @@
         <div class="container">
             <nav class="navbar">
                 <div class="logo">
-                    <a href="assets/images/logo.png" class="img">
-                        <img src="assets/images/logo.png" alt="Ici Moundou" class="logo-img">
-                    </a>
                     <a href="index.html">
+                        <div class="logo-img">
+                            <i class="fas fa-microphone-alt"></i>
+                        </div>
                         <span class="logo-text">Ici Moundou</span>
                     </a>
                 </div>
@@ -453,7 +477,7 @@
         <section class="contact-section">
             <div class="container">
                 <div class="contact-grid">
-                    <!-- Formulaire -->
+                    <!-- Formulaire amélioré avec fallback email -->
                     <div class="contact-form">
                         <h3>Envoyez-nous un message</h3>
                         <form id="contactForm" action="https://formspree.io/f/xpqekeqo" method="POST">
@@ -478,9 +502,20 @@
                             <div class="form-group">
                                 <textarea name="message" id="message" rows="5" placeholder="Votre message *" required></textarea>
                             </div>
-                            <button type="submit" class="btn btn-primary">Envoyer le message <i class="fas fa-paper-plane"></i></button>
+                            <button type="submit" class="btn btn-primary" id="submitBtn">
+                                <i class="fas fa-paper-plane"></i> Envoyer le message
+                            </button>
                             <div id="formFeedback" class="form-feedback"></div>
                         </form>
+                        
+                        <!-- Message de fallback pour l'email direct -->
+                        <div id="emailFallback" style="display: none; margin-top: 20px; padding: 15px; background: #fef3c7; border-radius: 8px; border-left: 4px solid #f59e0b;">
+                            <p style="margin: 0; font-size: 0.9rem;">
+                                <i class="fas fa-envelope" style="margin-right: 8px;"></i>
+                                <strong>Alternative :</strong> Vous pouvez aussi nous écrire directement à 
+                                <a href="mailto:contact@icimoundou.com?subject=Contact%20via%20site%20web" style="color: var(--primary); font-weight: bold;">contact@icimoundou.com</a>
+                            </p>
+                        </div>
                     </div>
 
                     <!-- Coordonnées -->
@@ -492,7 +527,7 @@
                                 <i class="fas fa-envelope"></i>
                             </div>
                             <div class="info-content">
-                                <h4>Email</h4>
+                                <h4>Email principal</h4>
                                 <a href="mailto:contact@icimoundou.com">contact@icimoundou.com</a>
                             </div>
                         </div>
@@ -520,7 +555,7 @@
                         <div class="map-container">
                             <div class="map-placeholder">
                                 <i class="fas fa-map-marker-alt fa-2x" style="color: var(--secondary); margin-bottom: 10px;"></i>
-                                <p>Moundou, Tchad</p>
+                                <p><strong>Moundou, Tchad</strong></p>
                                 <p style="font-size: 0.85rem;">Nous contacter pour un rendez-vous</p>
                             </div>
                         </div>
@@ -568,7 +603,7 @@
     </footer>
 
     <script>
-        // Menu burger
+        // Menu burger amélioré
         function initBurgerMenu() {
             const burger = document.getElementById('burgerBtn');
             const menu = document.getElementById('navMenu');
@@ -587,72 +622,199 @@
                         lines[2].style.transform = 'none';
                     }
                 });
+                
+                // Fermer le menu en cliquant sur un lien
+                document.querySelectorAll('.nav-menu a').forEach(link => {
+                    link.addEventListener('click', () => {
+                        menu.classList.remove('active');
+                        const lines = burger.querySelectorAll('.burger-line');
+                        lines[0].style.transform = 'none';
+                        lines[1].style.opacity = '1';
+                        lines[2].style.transform = 'none';
+                    });
+                });
             }
         }
 
-        // Validation email
+        // Validation email robuste
         function validateEmail(email) {
             const re = /^[^\s@]+@([^\s@.,]+\.)+[^\s@.,]{2,}$/;
             return re.test(email);
         }
 
-        // Gestion formulaire
+        // Afficher le fallback email si nécessaire
+        function showEmailFallback() {
+            const fallback = document.getElementById('emailFallback');
+            if (fallback) {
+                fallback.style.display = 'block';
+                setTimeout(() => {
+                    fallback.style.animation = 'fadeInUp 0.3s ease';
+                }, 10);
+            }
+        }
+
+        // Gestion améliorée du formulaire avec fallback
         function initContactForm() {
             const form = document.getElementById('contactForm');
             if (!form) return;
             
+            const submitBtn = document.getElementById('submitBtn');
+            const feedback = document.getElementById('formFeedback');
+            let isSubmitting = false;
+            
             form.addEventListener('submit', async (e) => {
                 e.preventDefault();
+                
+                // Éviter les soumissions multiples
+                if (isSubmitting) return;
                 
                 const nom = document.getElementById('nom').value.trim();
                 const email = document.getElementById('email').value.trim();
                 const message = document.getElementById('message').value.trim();
-                const feedback = document.getElementById('formFeedback');
                 
+                // Validation des champs
                 if (!nom || !email || !message) {
-                    feedback.textContent = 'Veuillez remplir tous les champs obligatoires.';
+                    feedback.textContent = '⚠️ Veuillez remplir tous les champs obligatoires (nom, email, message).';
                     feedback.className = 'form-feedback error';
+                    feedback.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
                     return;
                 }
                 
                 if (!validateEmail(email)) {
-                    feedback.textContent = 'Veuillez entrer une adresse email valide.';
+                    feedback.textContent = '⚠️ Veuillez entrer une adresse email valide (ex: nom@domaine.com).';
                     feedback.className = 'form-feedback error';
+                    feedback.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
                     return;
                 }
                 
+                // Désactiver le bouton et afficher un état de chargement
+                isSubmitting = true;
+                const originalButtonText = submitBtn.innerHTML;
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Envoi en cours...';
+                
                 const formData = new FormData(form);
+                
+                // Timeout pour éviter une attente trop longue
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 15000);
                 
                 try {
                     const response = await fetch(form.action, {
                         method: 'POST',
                         body: formData,
-                        headers: { 'Accept': 'application/json' }
+                        headers: { 'Accept': 'application/json' },
+                        signal: controller.signal
                     });
                     
+                    clearTimeout(timeoutId);
+                    
                     if (response.ok) {
-                        feedback.textContent = 'Message envoyé avec succès ! Nous vous répondrons dans les plus brefs délais.';
+                        feedback.innerHTML = '<i class="fas fa-check-circle"></i> Message envoyé avec succès ! Nous vous répondrons dans les plus brefs délais.';
                         feedback.className = 'form-feedback success';
                         form.reset();
+                        // Cacher le fallback si tout va bien
+                        const fallback = document.getElementById('emailFallback');
+                        if (fallback) fallback.style.display = 'none';
                     } else {
-                        feedback.textContent = 'Erreur lors de l\'envoi. Veuillez réessayer ou nous contacter directement par email.';
-                        feedback.className = 'form-feedback error';
+                        // Erreur du serveur Formspree
+                        const errorData = await response.json().catch(() => ({}));
+                        console.warn('Formspree error:', errorData);
+                        throw new Error(`Erreur serveur (${response.status})`);
                     }
                 } catch (err) {
-                    feedback.textContent = 'Erreur réseau. Veuillez vérifier votre connexion.';
+                    clearTimeout(timeoutId);
+                    console.error('Erreur d\'envoi:', err);
+                    
+                    let errorMessage = '❌ Erreur lors de l\'envoi. ';
+                    
+                    if (err.name === 'AbortError') {
+                        errorMessage += 'Le serveur ne répond pas. ';
+                    } else if (err.message.includes('Failed to fetch') || err.message.includes('Network')) {
+                        errorMessage += 'Problème de connexion réseau. ';
+                    } else {
+                        errorMessage += 'Veuillez réessayer ou nous contacter directement par email. ';
+                    }
+                    
+                    errorMessage += 'Vous pouvez utiliser notre adresse email ci-contre.';
+                    feedback.innerHTML = errorMessage;
                     feedback.className = 'form-feedback error';
+                    
+                    // Afficher l'alternative email
+                    showEmailFallback();
+                    
+                    // Préremplir le lien mailto avec les données du formulaire
+                    const mailtoLink = document.querySelector('#emailFallback a');
+                    if (mailtoLink) {
+                        const subject = `[Contact] ${document.getElementById('sujet').options[document.getElementById('sujet').selectedIndex].text}`;
+                        const body = `Nom: ${nom}\nEmail: ${email}\nTéléphone: ${document.getElementById('telephone').value || 'Non renseigné'}\n\nMessage:\n${message}`;
+                        mailtoLink.href = `mailto:contact@icimoundou.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+                    }
+                } finally {
+                    isSubmitting = false;
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = originalButtonText;
+                    
+                    // Faire défiler jusqu'au feedback
+                    feedback.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    
+                    // Auto-effacement après 8 secondes pour les messages de succès uniquement
+                    if (feedback.classList.contains('success')) {
+                        setTimeout(() => {
+                            if (feedback.parentNode) {
+                                feedback.style.opacity = '0';
+                                setTimeout(() => {
+                                    feedback.innerHTML = '';
+                                    feedback.className = 'form-feedback';
+                                    feedback.style.opacity = '1';
+                                }, 300);
+                            }
+                        }, 8000);
+                    }
                 }
-                
-                setTimeout(() => {
-                    feedback.textContent = '';
-                    feedback.className = 'form-feedback';
-                }, 5000);
             });
+        }
+
+        // Validation en temps réel pour améliorer l'expérience utilisateur
+        function addRealTimeValidation() {
+            const emailInput = document.getElementById('email');
+            if (emailInput) {
+                emailInput.addEventListener('blur', () => {
+                    if (emailInput.value.trim() && !validateEmail(emailInput.value.trim())) {
+                        emailInput.style.borderColor = '#dc3545';
+                        const errorMsg = document.createElement('small');
+                        errorMsg.style.color = '#dc3545';
+                        errorMsg.style.fontSize = '0.8rem';
+                        errorMsg.style.marginTop = '5px';
+                        errorMsg.style.display = 'block';
+                        errorMsg.id = 'emailErrorMsg';
+                        errorMsg.textContent = 'Format d\'email invalide';
+                        const parent = emailInput.parentElement;
+                        const existingError = parent.querySelector('#emailErrorMsg');
+                        if (!existingError) {
+                            parent.appendChild(errorMsg);
+                        }
+                    } else {
+                        emailInput.style.borderColor = '#e0e0e0';
+                        const existingError = emailInput.parentElement.querySelector('#emailErrorMsg');
+                        if (existingError) existingError.remove();
+                    }
+                });
+                
+                emailInput.addEventListener('input', () => {
+                    if (emailInput.style.borderColor === '#dc3545') {
+                        emailInput.style.borderColor = '#e0e0e0';
+                        const existingError = emailInput.parentElement.querySelector('#emailErrorMsg');
+                        if (existingError) existingError.remove();
+                    }
+                });
+            }
         }
 
         document.addEventListener('DOMContentLoaded', () => {
             initBurgerMenu();
             initContactForm();
+            addRealTimeValidation();
         });
     </script>
 </body>
