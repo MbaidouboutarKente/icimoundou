@@ -880,7 +880,6 @@
                             <span class="logo-text">Ici Moundou</span>
                         </a>
                     </div>
-                    <!-- <span class="logo-text">Ici Moundou</span> -->
                 </div>
                 
                 <button class="burger-menu" id="burgerBtn" aria-label="Menu">
@@ -1112,20 +1111,21 @@
                         </div>
                         
                         <div>
-                            <form class="contact-form" id="contactForm">
+                            <!-- ====== FORMULAIRE FORMSPREE INTÉGRÉ ====== -->
+                            <form class="contact-form" action="https://formspree.io/f/mjgqoygr" method="POST">
                                 <h3 style="margin-bottom: 20px; color: var(--primary);">Envoyez-nous un message</h3>
                                 
-                                <label for="contactName">Nom complet *</label>
-                                <input type="text" id="contactName" placeholder="Votre nom" required>
+                                <label for="name">Votre nom *</label>
+                                <input type="text" id="name" name="name" placeholder="Votre nom" required>
                                 
-                                <label for="contactEmail">Email *</label>
-                                <input type="email" id="contactEmail" placeholder="votre@email.com" required>
+                                <label for="email">Votre email *</label>
+                                <input type="email" id="email" name="email" placeholder="votre@email.com" required>
                                 
-                                <label for="contactPhone">Téléphone</label>
-                                <input type="tel" id="contactPhone" placeholder="+235 62 12 36 40">
+                                <label for="phone">Téléphone</label>
+                                <input type="tel" id="phone" name="phone" placeholder="+235 62 12 36 40">
                                 
-                                <label for="contactSubject">Sujet *</label>
-                                <select id="contactSubject" required>
+                                <label for="subject">Sujet *</label>
+                                <select id="subject" name="subject" required>
                                     <option value="">Sélectionnez un sujet</option>
                                     <option value="collaboration">Collaboration artistique</option>
                                     <option value="interview">Demande d'interview</option>
@@ -1134,8 +1134,8 @@
                                     <option value="autre">Autre</option>
                                 </select>
                                 
-                                <label for="contactMessage">Message *</label>
-                                <textarea id="contactMessage" placeholder="Votre message..." required></textarea>
+                                <label for="message">Votre message *</label>
+                                <textarea id="message" name="message" placeholder="Votre message..." required></textarea>
                                 
                                 <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;">
                                     <i class="fas fa-paper-plane"></i> Envoyer le message
@@ -1564,35 +1564,12 @@
             }
         }
 
-        // ==================== FORMULAIRE DE CONTACT ====================
-        function initContactForm() {
-            const form = document.getElementById('contactForm');
-            if (form) {
-                form.addEventListener('submit', (e) => {
-                    e.preventDefault();
-                    
-                    const name = document.getElementById('contactName').value;
-                    const email = document.getElementById('contactEmail').value;
-                    const subject = document.getElementById('contactSubject').value;
-                    const message = document.getElementById('contactMessage').value;
-                    
-                    if (name && email && subject && message) {
-                        alert('✅ Merci pour votre message ! Nous vous répondrons dans les plus brefs délais.');
-                        form.reset();
-                    } else {
-                        alert('⚠️ Veuillez remplir tous les champs obligatoires.');
-                    }
-                });
-            }
-        }
-
         // ==================== INITIALISATION ====================
         document.addEventListener('DOMContentLoaded', () => {
             renderSlider();
             renderTalentsMoment();
             renderAllTalents();
             initBurgerMenu();
-            initContactForm();
             
             // Navigation
             document.querySelectorAll('.nav-menu a, .page-link').forEach(link => {
