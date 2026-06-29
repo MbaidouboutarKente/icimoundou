@@ -1111,7 +1111,7 @@
                         </div>
                         
                         <div>
-                            <!-- ====== FORMULAIRE FORMSPREE INTÉGRÉ ====== -->
+                            <!-- ====== FORMULAIRE FORMSPREE CORRIGÉ ====== -->
                             <form class="contact-form" action="https://formspree.io/f/mjgqoygr" method="POST">
                                 <h3 style="margin-bottom: 20px; color: var(--primary);">Envoyez-nous un message</h3>
                                 
@@ -1119,7 +1119,7 @@
                                 <input type="text" id="name" name="name" placeholder="Votre nom" required>
                                 
                                 <label for="email">Votre email *</label>
-                                <input type="email" id="email" name="email" placeholder="votre@email.com" required>
+                                <input type="email" id="email" name="_replyto" placeholder="votre@email.com" required>
                                 
                                 <label for="phone">Téléphone</label>
                                 <input type="tel" id="phone" name="phone" placeholder="+235 62 12 36 40">
@@ -1127,15 +1127,18 @@
                                 <label for="subject">Sujet *</label>
                                 <select id="subject" name="subject" required>
                                     <option value="">Sélectionnez un sujet</option>
-                                    <option value="collaboration">Collaboration artistique</option>
-                                    <option value="interview">Demande d'interview</option>
-                                    <option value="annonceur">Devenir annonceur</option>
-                                    <option value="partenariat">Partenariat</option>
-                                    <option value="autre">Autre</option>
+                                    <option value="Collaboration artistique">Collaboration artistique</option>
+                                    <option value="Demande d'interview">Demande d'interview</option>
+                                    <option value="Devenir annonceur">Devenir annonceur</option>
+                                    <option value="Partenariat">Partenariat</option>
+                                    <option value="Autre">Autre</option>
                                 </select>
                                 
                                 <label for="message">Votre message *</label>
                                 <textarea id="message" name="message" placeholder="Votre message..." required></textarea>
+                                
+                                <!-- Champ caché pour l'objet de l'email -->
+                                <input type="hidden" name="_subject" value="📩 Nouveau message depuis Ici Moundou">
                                 
                                 <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;">
                                     <i class="fas fa-paper-plane"></i> Envoyer le message
