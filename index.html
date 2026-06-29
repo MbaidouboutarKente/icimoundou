@@ -82,6 +82,8 @@
             --light: #F9F9F9;
             --gray: #6C757D;
             --white: #FFFFFF;
+            --success: #27ae60;
+            --error: #e74c3c;
             --shadow: 0 4px 12px rgba(0,0,0,0.08);
             --shadow-hover: 0 8px 24px rgba(0,0,0,0.12);
             --border-radius: 12px;
@@ -159,14 +161,8 @@
         .logo-img {
             height: 48px;
             width: 48px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
             border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--white);
-            font-weight: bold;
-            font-size: 1.2rem;
+            object-fit: cover;
         }
 
         .logo-text {
@@ -271,6 +267,12 @@
             transform: translateY(-2px);
             box-shadow: var(--shadow-hover);
             color: var(--white);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
         }
 
         .btn-cta {
@@ -537,6 +539,7 @@
             align-items: center;
             justify-content: center;
             font-size: 1.1rem;
+            flex-shrink: 0;
         }
 
         .contact-item a {
@@ -596,10 +599,12 @@
             font-family: inherit;
             transition: var(--transition);
             margin-bottom: 20px;
+            font-size: 1rem;
         }
 
         .contact-form input:focus,
-        .contact-form textarea:focus {
+        .contact-form textarea:focus,
+        .contact-form select:focus {
             border-color: var(--secondary);
             outline: none;
             box-shadow: 0 0 0 3px rgba(230, 126, 34, 0.1);
@@ -608,6 +613,84 @@
         .contact-form textarea {
             resize: vertical;
             min-height: 120px;
+        }
+
+        .contact-form .form-error {
+            color: var(--error);
+            font-size: 0.85rem;
+            margin-top: -15px;
+            margin-bottom: 15px;
+            display: none;
+        }
+
+        .contact-form .form-error.show {
+            display: block;
+        }
+
+        /* ==================== TOAST NOTIFICATION ==================== */
+        .toast {
+            position: fixed;
+            top: 100px;
+            right: 30px;
+            padding: 20px 30px;
+            border-radius: var(--border-radius);
+            color: var(--white);
+            font-weight: 600;
+            box-shadow: var(--shadow-hover);
+            z-index: 3000;
+            transform: translateX(120%);
+            transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            max-width: 450px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast-success {
+            background: var(--success);
+        }
+
+        .toast-error {
+            background: var(--error);
+        }
+
+        .toast-icon {
+            font-size: 1.8rem;
+            flex-shrink: 0;
+        }
+
+        .toast-content {
+            flex: 1;
+        }
+
+        .toast-title {
+            font-size: 1.1rem;
+            margin-bottom: 4px;
+        }
+
+        .toast-message {
+            font-weight: 400;
+            font-size: 0.9rem;
+            opacity: 0.95;
+        }
+
+        .toast-close {
+            background: none;
+            border: none;
+            color: var(--white);
+            font-size: 1.4rem;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: var(--transition);
+            padding: 0 0 0 10px;
+        }
+
+        .toast-close:hover {
+            opacity: 1;
         }
 
         /* ==================== MENTIONS LÉGALES ==================== */
@@ -850,6 +933,14 @@
             .contact-social {
                 justify-content: center;
             }
+            .toast {
+                top: auto;
+                bottom: 30px;
+                right: 20px;
+                left: 20px;
+                max-width: none;
+                padding: 16px 20px;
+            }
         }
 
         @media (max-width: 480px) {
@@ -872,14 +963,12 @@
         <div class="container">
             <nav class="navbar">
                 <div class="logo">
-                    <div class="logo">
-                        <a href="assets/images/logo.png" class="img">
-                            <img src="assets/images/logo.png" alt="Ici Moundou" class="logo-img">
-                        </a>
-                        <a href="index.html">
-                            <span class="logo-text">Ici Moundou</span>
-                        </a>
-                    </div>
+                    <a href="#">
+                        <img src="assets/images/logo.png" alt="Ici Moundou" class="logo-img">
+                    </a>
+                    <a href="#">
+                        <span class="logo-text">Ici Moundou</span>
+                    </a>
                 </div>
                 
                 <button class="burger-menu" id="burgerBtn" aria-label="Menu">
@@ -1111,8 +1200,8 @@
                         </div>
                         
                         <div>
-                            <!-- ====== FORMULAIRE FORMSPREE CORRIGÉ ====== -->
-                            <form class="contact-form" action="https://formspree.io/f/mjgqoygr" method="POST">
+                            <!-- ====== FORMULAIRE FORMSPREE AVEC GESTION JS ====== -->
+                            <form class="contact-form" id="contactForm" action="https://formspree.io/f/mjgqoygr" method="POST">
                                 <h3 style="margin-bottom: 20px; color: var(--primary);">Envoyez-nous un message</h3>
                                 
                                 <label for="name">Votre nom *</label>
@@ -1140,8 +1229,16 @@
                                 <!-- Champ caché pour l'objet de l'email -->
                                 <input type="hidden" name="_subject" value="📩 Nouveau message depuis Ici Moundou">
                                 
-                                <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;">
-                                    <i class="fas fa-paper-plane"></i> Envoyer le message
+                                <!-- Empêcher la redirection vers la page de Formspree -->
+                                <input type="hidden" name="_redirect" value="">
+                                
+                                <div class="form-error" id="formError">
+                                    <i class="fas fa-exclamation-circle"></i> Veuillez remplir tous les champs obligatoires.
+                                </div>
+                                
+                                <button type="submit" class="btn btn-primary" id="submitBtn" style="width: 100%; justify-content: center;">
+                                    <i class="fas fa-paper-plane"></i> <span id="btnText">Envoyer le message</span>
+                                    <span id="btnSpinner" style="display: none;"><i class="fas fa-spinner fa-spin"></i></span>
                                 </button>
                             </form>
                         </div>
@@ -1272,6 +1369,16 @@
             </div>
         </div>
     </footer>
+
+    <!-- ==================== TOAST NOTIFICATION ==================== -->
+    <div class="toast" id="toast">
+        <div class="toast-icon" id="toastIcon"><i class="fas fa-check-circle"></i></div>
+        <div class="toast-content">
+            <div class="toast-title" id="toastTitle">Succès</div>
+            <div class="toast-message" id="toastMessage">Votre message a été envoyé avec succès !</div>
+        </div>
+        <button class="toast-close" id="toastClose">&times;</button>
+    </div>
 
     <!-- ==================== MODALE VIDÉO ==================== -->
     <div id="videoModal" class="modal">
@@ -1437,13 +1544,7 @@
             
             if (!modal || !container) return;
             
-            let embedHtml = '';
-            if (videoType === 'youtube') {
-                embedHtml = `<iframe src="${videoUrl}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
-            } else {
-                embedHtml = `<iframe src="${videoUrl}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
-            }
-            
+            let embedHtml = `<iframe src="${videoUrl}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
             container.innerHTML = embedHtml;
             modal.classList.add('active');
             document.body.style.overflow = 'hidden';
@@ -1519,18 +1620,15 @@
 
         // ==================== NAVIGATION ====================
         function navigateTo(pageId) {
-            // Cacher toutes les pages
             document.querySelectorAll('.page').forEach(page => {
                 page.classList.remove('active');
             });
             
-            // Afficher la page cible
             const targetPage = document.getElementById(`page-${pageId}`);
             if (targetPage) {
                 targetPage.classList.add('active');
             }
             
-            // Mettre à jour les liens actifs
             document.querySelectorAll('.nav-menu a, .page-link').forEach(link => {
                 link.classList.remove('active');
                 if (link.dataset.page === pageId) {
@@ -1538,10 +1636,7 @@
                 }
             });
             
-            // Fermer le menu mobile
             document.getElementById('navMenu').classList.remove('active');
-            
-            // Scroll en haut
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
@@ -1567,12 +1662,135 @@
             }
         }
 
+        // ==================== TOAST NOTIFICATION ====================
+        function showToast(type, title, message) {
+            const toast = document.getElementById('toast');
+            const icon = document.getElementById('toastIcon');
+            const titleEl = document.getElementById('toastTitle');
+            const messageEl = document.getElementById('toastMessage');
+            
+            if (!toast || !icon || !titleEl || !messageEl) return;
+            
+            // Reset classes
+            toast.className = 'toast';
+            
+            if (type === 'success') {
+                toast.classList.add('toast-success');
+                icon.innerHTML = '<i class="fas fa-check-circle"></i>';
+            } else {
+                toast.classList.add('toast-error');
+                icon.innerHTML = '<i class="fas fa-exclamation-circle"></i>';
+            }
+            
+            titleEl.textContent = title;
+            messageEl.textContent = message;
+            
+            toast.classList.add('show');
+            
+            // Auto hide after 6 seconds
+            clearTimeout(toast._timeout);
+            toast._timeout = setTimeout(() => {
+                toast.classList.remove('show');
+            }, 6000);
+        }
+
+        function hideToast() {
+            const toast = document.getElementById('toast');
+            if (toast) {
+                toast.classList.remove('show');
+                clearTimeout(toast._timeout);
+            }
+        }
+
+        // ==================== FORMULAIRE DE CONTACT ====================
+        function initContactForm() {
+            const form = document.getElementById('contactForm');
+            const submitBtn = document.getElementById('submitBtn');
+            const btnText = document.getElementById('btnText');
+            const btnSpinner = document.getElementById('btnSpinner');
+            const formError = document.getElementById('formError');
+            const toastClose = document.getElementById('toastClose');
+            
+            if (toastClose) {
+                toastClose.addEventListener('click', hideToast);
+            }
+            
+            if (!form) return;
+            
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                // Réinitialiser l'erreur
+                formError.classList.remove('show');
+                
+                // Récupérer les champs
+                const name = document.getElementById('name').value.trim();
+                const email = document.getElementById('email').value.trim();
+                const subject = document.getElementById('subject').value;
+                const message = document.getElementById('message').value.trim();
+                
+                // Validation simple
+                if (!name || !email || !subject || !message) {
+                    formError.textContent = '⚠️ Veuillez remplir tous les champs obligatoires.';
+                    formError.classList.add('show');
+                    return;
+                }
+                
+                // Validation email
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(email)) {
+                    formError.textContent = '⚠️ Veuillez entrer une adresse email valide.';
+                    formError.classList.add('show');
+                    return;
+                }
+                
+                // Désactiver le bouton
+                submitBtn.disabled = true;
+                btnText.textContent = 'Envoi en cours...';
+                btnSpinner.style.display = 'inline-block';
+                
+                try {
+                    // Récupérer les données du formulaire
+                    const formData = new FormData(form);
+                    
+                    // Envoyer via fetch pour éviter la redirection
+                    const response = await fetch(form.action, {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'Accept': 'application/json'
+                        }
+                    });
+                    
+                    if (response.ok) {
+                        // Succès
+                        showToast('success', '✅ Message envoyé !', 'Merci pour votre message. Nous vous répondrons dans les plus brefs délais.');
+                        form.reset();
+                    } else {
+                        // Erreur serveur
+                        const errorData = await response.json();
+                        showToast('error', '❌ Erreur', errorData.error || 'Une erreur est survenue. Veuillez réessayer.');
+                    }
+                } catch (error) {
+                    // Erreur réseau
+                    showToast('error', '❌ Erreur réseau', 'Impossible de contacter le serveur. Vérifiez votre connexion et réessayez.');
+                    console.error('Erreur:', error);
+                } finally {
+                    // Réactiver le bouton
+                    submitBtn.disabled = false;
+                    btnText.textContent = 'Envoyer le message';
+                    btnSpinner.style.display = 'none';
+                }
+            });
+        }
+
         // ==================== INITIALISATION ====================
         document.addEventListener('DOMContentLoaded', () => {
             renderSlider();
             renderTalentsMoment();
             renderAllTalents();
             initBurgerMenu();
+            initContactForm();
             
             // Navigation
             document.querySelectorAll('.nav-menu a, .page-link').forEach(link => {
